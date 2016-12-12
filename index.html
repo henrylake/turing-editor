@@ -7,22 +7,12 @@
     <link rel="stylesheet" href="build/css/live-editor.tooltips.css"/>
     <link rel="stylesheet" href="build/css/live-editor.ui.css"/>
     <link rel="stylesheet" href="build/css/live-editor.debugger.css"/>
-    <style>
-        body {
-            padding: 20px;
-        }
+    <link rel="stylesheet" href="style.css"/>
 
-        h1 {
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        #sample-live-editor {
-            padding: 0;
-        }
-    </style>
+    
 </head>
 <body>
-    <div id="sample-live-editor"></div>
+    
 
     <script src="build/js/live-editor.core_deps.js"></script>
     <script src="build/js/live-editor.editor_ace_deps.js"></script>
@@ -32,58 +22,98 @@
     <script src="build/js/live-editor.ui.js"></script>
     <script src="build/js/live-editor.editor_ace.js"></script>
     <!--<script src="build/js/live-editor.debugger.js"></script>-->
+    <style>
+        body{
+            height: 88%;
+        }
+    </style> 
 
-    <script>
-    var outputUrl = "output.html";
-    var useDebugger = false;
-    // TODO(kevinb7) conditionally load live-editor.debugger.js
-//    if (location.search.indexOf("debugger=true") !== -1) {
-//        outputUrl += "?debugger=true";
-//        useDebugger = true;
-//    }
+    <ul class="tab">
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'code')">Code</a></li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'reference')">p5 Reference</a></li>      
+    </ul>
 
-    var code = window.localStorage["test-code"] || "rect(10, 10, 100, 100);";
+    <div id="code" class="tabcontent">
+      <div id="sample-live-editor"></div>
+    </div>
 
-    var search = location.search.substring(1);
-    var params = {};
-    search.split("&").forEach(function(param) {
-        var tokens = param.split("=");
-        params[tokens[0]] = tokens[1];
-    });
+    <div id="reference" class="tabcontent">
+      <iframe src="https://p5js.org/reference/" style="width: 100%; height: 100%;"></iframe>
+    </div>    
 
-    if (params.scratchpad) {
-        var xhr = new XMLHttpRequest();
-        var baseUrl = "https://www.khanacademy.org/api/internal/scratchpads/";
-        xhr.open("GET", baseUrl + params.scratchpad, false);
-        xhr.addEventListener("load", function() {
-            var scratchpad = JSON.parse(this.responseText);
-            code = scratchpad.revision.code;
-            var h1 = document.querySelector('h1');
-            h1.innerText = scratchpad.title;
+    <!-- <div id="sample-live-editor"></div> -->
+
+    <script>    
+    document.getElementById('code').style.display = "block";
+
+    function openTab(evt, tabName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the link that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+    <script>        
+        var outputUrl = "output.html";
+        var useDebugger = false;
+
+        var code = window.localStorage["test-code"]  || "";
+
+        var search = location.search.substring(1);
+        var params = {};
+        search.split("&").forEach(function(param) {
+            var tokens = param.split("=");
+            params[tokens[0]] = tokens[1];
         });
-        xhr.send();
-    }
 
-    window.liveEditor = new LiveEditor({
-        el: $("#sample-live-editor"),
-        code: code,
-        width: 400,
-        height: 400,
-        editorHeight: "80%",
-        autoFocus: true,
-        workersDir: "build/workers/",
-        externalsDir: "build/external/",
-        imagesDir: "build/images/",
-        soundsDir: "sounds/",
-        execFile: outputUrl,
-        jshintFile: "build/external/jshint/jshint.js",
-        useDebugger: useDebugger,
-        newErrorExperience: true,
-    });
-    liveEditor.editor.on("change", function() {
-        window.localStorage["test-code"] = liveEditor.editor.text();
-    });
-    ScratchpadAutosuggest.init(liveEditor.editor.editor);
+        if (params.scratchpad) {
+            var xhr = new XMLHttpRequest();
+            var baseUrl = "https://www.khanacademy.org/api/internal/scratchpads/";
+            xhr.open("GET", baseUrl + params.scratchpad, false);
+            xhr.addEventListener("load", function() {
+                var scratchpad = JSON.parse(this.responseText);
+                code = scratchpad.revision.code;
+                var h1 = document.querySelector('h1');
+                h1.innerText = scratchpad.title;
+            });
+            xhr.send();
+        }
+
+        window.liveEditor = new LiveEditor({
+            el: $('#sample-live-editor'),
+            code: code,        
+            height: '95%',
+            editorHeight: "100%",
+            autoFocus: true,
+            workersDir: "build/workers/",
+            externalsDir: "build/external/",
+            imagesDir: "build/images/",
+            soundsDir: "sounds/",
+            execFile: outputUrl,
+            jshintFile: "build/external/jshint/jshint.js",
+            useDebugger: useDebugger,
+            newErrorExperience: true,
+        });
+        liveEditor.editor.on("change", function() {
+            window.localStorage["test-code"] = liveEditor.editor.text();
+        });
+        ScratchpadAutosuggest.init(liveEditor.editor.editor);
+       
     </script>
 </body>
 </html>
