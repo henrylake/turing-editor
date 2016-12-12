@@ -30,8 +30,10 @@
     </style> 
 
     <ul class="tab">
-      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'code')">Code</a></li>
-      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'reference')">p5 Reference</a></li>      
+      <li class="nv"><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'code')">Code</a></li>
+      <li class="nv"><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'reference')">p5 Reference</a></li> 
+      <li class="saveButton"><button onclick="saveCode()">Save</button></li> 
+
     </ul>
 
     <div id="code" class="tabcontent">
@@ -44,8 +46,13 @@
 
     <!-- <div id="sample-live-editor"></div> -->
 
+
     <script>    
     document.getElementById('code').style.display = "block";
+
+    function saveCode() {
+        console.log(window.frames)
+    }
 
     function openTab(evt, tabName) {
             // Declare all variables

@@ -9,7 +9,12 @@ ul.tab {
 }
 
 /* Float the list items side by side */
-ul.tab li {float: left;}
+ul.tab li.nv {float: left;}
+
+li.saveButton {
+    float: right;
+    padding: 13px;
+}
 
 /* Style the links inside the list items */
 ul.tab li a {
