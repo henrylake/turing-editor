@@ -49,22 +49,34 @@
 
     <script>    
 
-    window.addEventListener("$messageOutgoing", receiveMessage, false);
+    var token = ''
+    var sourceFrame = null
+
+    window.addEventListener("message", receiveMessage, false);
 
     function receiveMessage(event)
     {
-      // var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
-      // if (origin !== "http://example.org:8080")
-      //   return;
+      //TODO: Add origin checking 
+      if (event.origin === 'http://localhost:8080') {
+        return;
+      }
 
-      console.log("message received! ", event)
+      token = event.data; 
+      sourceFrame = event.source;
+
+      //todo replace * with tl domain. 
+      // event.source.postMessage(liveEditor.editor.text(), '*');
     }
-
-
     document.getElementById('code').style.display = "block";
 
     function saveCode() {
-        console.log(window.frames)
+        if(sourceFrame) {
+            console.log("sending message")
+            console.log(sourceFrame);
+            sourceFrame.postMessage(liveEditor.editor.text(), 'http://localhost:9000');
+        } else {
+            console.log("no source");
+        }
     }
 
     function openTab(evt, tabName) {
