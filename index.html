@@ -48,6 +48,19 @@
 
 
     <script>    
+
+    window.addEventListener("$messageOutgoing", receiveMessage, false);
+
+    function receiveMessage(event)
+    {
+      // var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
+      // if (origin !== "http://example.org:8080")
+      //   return;
+
+      console.log("message received! ", event)
+    }
+
+
     document.getElementById('code').style.display = "block";
 
     function saveCode() {
